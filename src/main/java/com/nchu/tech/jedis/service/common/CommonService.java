@@ -22,7 +22,7 @@ public class CommonService {
     @Autowired
     private RedisService redisService;
 
-    @PostConstruct
+    //@PostConstruct
     private void syncHBXJRegionToRedis() {
         String querySql = "select  code, region_desc from hbxj_region limit 100;";
         List<Map<String, Object>> ret = this.jdbcTemplate.queryForList(querySql);
@@ -35,6 +35,28 @@ public class CommonService {
 
         //System.out.println(String.format("======================>jdbcTemplate query result size: %d ", ret.size()));
         //System.out.println(String.format("======================>the first record is %s", ret.get(0).toString()));
+    }
+
+    @PostConstruct
+    private void syncHBXJRegionToRedisWithThread() {
+        int pageSize = 1000;
+        String querySql = "select code, region_desc from hbxj_region limit %d, "+pageSize+";";
+        String queryCount = "select count(1) from hbxj_region;";
+        Integer regionCount = jdbcTemplate.queryForObject(queryCount, Integer.class);
+        int flag = 0;
+        do {
+            List<Map<String, Object>> ret = this.jdbcTemplate.queryForList(String.format(querySql, flag*pageSize));
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Map<byte[], byte[]> hbxjRegion = new HashMap<>();
+                    ret.stream().forEach(item -> hbxjRegion.put(String.valueOf(item.get("code")).getBytes(),
+                            String.valueOf(item.get("region_desc")).getBytes()));
+                    redisService.hmset(null, hbxjRegion);
+                }
+            }).start();
+            flag++;
+        } while (flag * pageSize < regionCount);
     }
 
 }
