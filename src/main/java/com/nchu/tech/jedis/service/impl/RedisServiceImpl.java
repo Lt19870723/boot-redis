@@ -51,4 +51,25 @@ public class RedisServiceImpl implements RedisService {
         String hkey = StringUtils.isEmpty(key) ? DEFAULT_HBXJ_REGION : key;
         connection.hMSet(hkey.getBytes(), pairs);
     }
+
+
+    /****
+     * 获取redis中湖北消金的地区编码
+     * @return
+     */
+    @Override
+    public Map getHBXJRegionOnRedis() {
+       return this.hgetall(DEFAULT_HBXJ_REGION);
+    }
+
+    /***
+     * 获取散列中的所有的值
+     * @param key
+     * @return
+     */
+    private Map hgetall(String key) {
+        RedisConnection connection = this.redisConnectionFactory.getConnection();
+        Map map = connection.hGetAll(key.getBytes());
+        return map;
+    }
 }

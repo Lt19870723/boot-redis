@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by fujianjian on 2017/5/5.
  */
@@ -47,5 +51,17 @@ public class RedisServiceTest {
     @Test
     public void testHashSet() {
         this.redisService.hset(null, "00021", "上海市");
+    }
+
+    @Test
+    public void testGetAllRegion() {
+        Map map = this.redisService.getHBXJRegionOnRedis();
+        final List<Integer> list = new ArrayList<Integer>(){{add(0);}};
+        map.forEach((key, value)->{
+            System.out.println(new String((byte[]) key));
+            System.out.println(new String((byte[]) value));
+            list.set(0, list.get(0) +1);
+        });
+        System.out.println(list.get(0));
     }
 }

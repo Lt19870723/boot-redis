@@ -16,4 +16,10 @@ public interface RedisService {
     void hset(String key, String field, String value);
 
     void hmset(String key, Map<byte[], byte[]> pairs);
+
+    /***
+     * 获取redis中湖北消金的地区编码
+     * @return
+     */
+    Map getHBXJRegionOnRedis();
 }
