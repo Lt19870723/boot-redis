@@ -1,6 +1,7 @@
 package com.nchu.tech.jedis.service;
 
 import com.nchu.tech.jedis.BootRedisApplication;
+import com.nchu.tech.jedis.service.impl.RedisServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +64,42 @@ public class RedisServiceTest {
             list.set(0, list.get(0) +1);
         });
         System.out.println(list.get(0));
+    }
+
+    @Autowired
+    private RedisServiceImpl redisServiceImpl;
+
+    @Test
+    public void testLPush() {
+        this.redisServiceImpl.lpush(null, null);
+    }
+
+    @Test
+    public void testRPop() throws Exception {
+        this.redisServiceImpl.rpop();
+    }
+
+    @Test
+    public void testSAdd() {
+        this.redisServiceImpl.sadd();
+    }
+    @Test
+    public void testSMember() {
+        this.redisServiceImpl.smember();
+    }
+
+    @Test
+    public void testZAdd() {
+        this.redisServiceImpl.zAdd();
+    }
+
+    @Test
+    public void testZAddTrup() {
+        this.redisServiceImpl.zAddTrup();
+    }
+
+    @Test
+    public void testZRange() {
+        this.redisServiceImpl.zRange();
     }
 }
