@@ -2,6 +2,7 @@ package com.nchu.tech.jedis.service.common;
 
 import com.nchu.tech.jedis.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -57,6 +58,14 @@ public class CommonService {
             }).start();
             flag++;
         } while (flag * pageSize < regionCount);
+    }
+
+    @Cacheable(value = "shenma:fund_hbxj:region")
+    public List<Map<String, Object>> getAllHBXJRegion() {
+        String whereSql = "select  code, region_desc from hbxj_region limit 150;";
+        List<Map<String, Object>> ret = this.jdbcTemplate.queryForList(whereSql);
+        System.out.println("若下面没出现“无缓存的时候调用”字样且能打印出数据表示测试成功");
+        return ret;
     }
 
 }
