@@ -22,8 +22,8 @@ public class ProductorRunnable implements Runnable {
     public void run() {
         RedisHelper helper = new RedisHelper();
         for (int index = 0; index < 100; index++) {
-            System.out.println(String.format("threadname %s product good%3s", Thread.currentThread().getName(), index));
-            helper.lpush(RedisHelper.redisQueue, String.format("threadname %s product good%3s", Thread.currentThread().getName(), index));
+            System.out.println(String.format("threadname %s product good%02d", Thread.currentThread().getName(), index));
+            helper.lpush(RedisHelper.redisQueue, String.format("threadname %s product good%3d", Thread.currentThread().getName(), index));
         }
     }
 }
